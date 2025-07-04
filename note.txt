@@ -1,0 +1,10 @@
+POST : http://localhost:1000/user/register
+POSTMAN : form-data (email, password,role(supplier)jika ingin sebagai supplier, profile(upload image))
+
+
+POST : http://localhost:1000/user/login
+POSTMAN : raw{email: password}
+
+POST : http://localhost:1000/products/upload-image
+POSTMAN: form-data (image) jika sudah login sebagai supplier
+
