@@ -1,0 +1,553 @@
+{
+	"info": {
+		"_postman_id": "2f7184a0-fff0-4181-b1f7-f9ac7800b891",
+		"name": "final1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46175451",
+		"_collection_link": "https://mizyal.postman.co/workspace/Mizyal's-Workspace~773bccc7-5fea-4854-8710-816de92c6da6/collection/46175451-2f7184a0-fff0-4181-b1f7-f9ac7800b891?action=share&source=collection_link&creator=46175451"
+	},
+	"item": [
+		{
+			"name": "user/admin register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "asep",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "asep@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "/Users/macbook/Documents/Tangkapan Layar 2025-06-28 pukul 14.00.56.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:6666/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/admin login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"mizyal12@gmail.com\",\n  \"password\": \"1234567ww8\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/admin reset-token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"mizyal12@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/user/reset-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"user",
+						"reset-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/admin reset-password",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"mizyal12@gmail.com\",\n    \"token\" : \"c770ffc2bc54346cc81375b0f0c5e188cc8352342089b046384136fb14dd322c\",\n    \"newPassword\" : \"1234567890\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/user/reset-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"user",
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6InBlbGFuZ2dhbiIsImlhdCI6MTc1MTgyNzU4OCwiZXhwIjoxNzUxOTEzOTg4fQ.8Fzp7xGSSQQHv3E7BcdFUOz07H3639bC9PXTXPoMvr8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"items\": [\n    { \"productId\": 1, \"qty\": 10 },\n    { \"productId\": 2, \"qty\": 10 }\n  ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/admin product-getAll(filters,sorting,pagination)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxODM1NTI2LCJleHAiOjE3NTE5MjE5MjZ9.N5nwGhM94iSl-uFPdvGeZdEEEqPqeuDOjZrIN8uevuQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6666/product/?limit=5&page=1&sort=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"product",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "sort",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin product-create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxODIzODA2LCJleHAiOjE3NTE5MTAyMDZ9.GzckkQU4uZv9Vbu1VmnzKf9oqKeTX1LD7kLoCLNkhxA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "tembakau filter rokoknya",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "tembakau ini terbuat dari tembakau original sampoerna mild",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "30000",
+							"type": "text"
+						},
+						{
+							"key": "stock",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/Users/macbook/Documents/Tangkapan Layar 2025-06-28 pukul 14.00.56.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:6666/product/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"product",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin product-update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxODI3ODkyLCJleHAiOjE3NTE5MTQyOTJ9.qTX3JDI8699BPeWMsyT2WVS46vJrwj8CLJ4bApmuBcM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "roko filter",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:6666/product/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"product",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin product-softdelete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxODI3ODkyLCJleHAiOjE3NTE5MTQyOTJ9.qTX3JDI8699BPeWMsyT2WVS46vJrwj8CLJ4bApmuBcM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6666/product/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"product",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin product-restore",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6666/product/3/restore",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"product",
+						"3",
+						"restore"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin get all order (filters,sorting,pagination)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxODMxMTM2LCJleHAiOjE3NTE5MTc1MzZ9.PBNNtA5053_mHix4zHpPLel9zyEdqMZXM1lHFdWokkA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6666/order?userId=2&page=1&limit=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"order"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user get all order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6InBlbGFuZ2dhbiIsImlhdCI6MTc1MTgyOTczOCwiZXhwIjoxNzUxOTE2MTM4fQ.RAso741IjTt-oZ5wOIQ2EAaATOvMH8yAosK-Ldg2KU8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6666/order/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"order",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user tranfer-point",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6InBlbGFuZ2dhbiIsImlhdCI6MTc1MTgzNDE4MywiZXhwIjoxNzUxOTIwNTgzfQ.y_6d_WwwtBszIgPImj_4k9ftljlRifWxT61tx5jr3pc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"asep@gmail.com\",\n  \"amount\": \"100\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/point/transfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"point",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user get all order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6InBlbGFuZ2dhbiIsImlhdCI6MTc1MTgzNjI3MiwiZXhwIjoxNzUxOTIyNjcyfQ.-XvcU4hcg4hDJV-iF5mjDxESzTAEabrvAHlgk4f6Li4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:6666/order/myorder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6666",
+					"path": [
+						"order",
+						"myorder"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

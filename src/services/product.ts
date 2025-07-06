@@ -29,8 +29,9 @@ export async function getAllProducts({
         },
       }
     : {};
-  const orderBy =
-    sort === "asc" || sort === "desc" ? { price: sort } : { createdAt: "desc" };
+
+  const orderBy: { [key: string]: "asc" | "desc" } =
+    sort === "asc" || sort === "desc" ? { price: sort } : { createdAD: "desc" }; // pastikan nama field cocok dengan schema
 
   const products = await prisma.product.findMany({
     where: {
@@ -41,12 +42,14 @@ export async function getAllProducts({
     skip: (page - 1) * limit,
     take: limit,
   });
+
   const total = await prisma.product.count({
     where: {
       ...where,
       deletedAt: null,
     },
   });
+
   return { products, total };
 }
 

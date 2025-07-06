@@ -27,7 +27,7 @@ export async function handleCreateProduct(req: Request, res: Response) {
 
 export async function handleProducts(req: Request, res: Response) {
   try {
-    const { search, sort, page, limit } = req.body;
+    const { search, sort, page, limit } = req.query;
     const result = await getAllProducts({
       search: search as string,
       sort: sort as "asc" | "desc",
