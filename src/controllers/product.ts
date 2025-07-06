@@ -43,7 +43,8 @@ export async function handleProducts(req: Request, res: Response) {
 export async function handleUpdateProduct(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);
-    await softDeleteProduct(id);
+    const data = req.body;
+    await updateProduct(id, data);
     res.json({ message: "product di update" });
   } catch (err: any) {
     res.status(400).json({ message: err.message });
