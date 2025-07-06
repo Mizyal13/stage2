@@ -1,46 +1,67 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import prisma from "../connection/client"; // pastikan prisma jalan
+import { registerS, loginS } from "../validation/auth";
+import {
+  registerUser,
+  loginUser,
+  resetToken,
+  resetPassword,
+} from "../services/auth";
 
-export const register = async (req: Request, res: Response) => {
+export async function handleRegist(req: Request, res: Response) {
   try {
-    console.log("📦 DEBUG BODY:", req.body); // Tambah ini!
+    const { error } = registerS.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    if (!req.file) {
+      res.status(400).json({ message: "gambar tidak diunggah" });
+      return;
+    }
 
     const { name, email, password, role } = req.body;
+    const profile = req.file.filename;
 
-    if (!name || !email || !password) {
-      res.status(400).json({ message: "Semua field harus diisi" });
-      return;
-    }
-
-    const exists = await prisma.user.findUnique({ where: { email } });
-    if (exists) {
-      res.status(400).json({ message: "Email sudah terdaftar" });
-      return;
-    }
-
-    const hashed = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashed,
-        role: role || "user",
-      },
-    });
-
-    res.status(201).json({
-      message: "Berhasil register",
-      data: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-    });
+    const user = await registerUser(name, email, password, role, profile);
+    res.status(201).json({ message: "berhasil register", user });
   } catch (err: any) {
-    console.error("[REGISTER ERROR]", err);
-    res.status(500).json({ message: "Gagal register", error: err.message });
+    res
+      .status(400)
+      .json({ message: err?.message || "terjadi kesalahan saat register" });
   }
-};
+}
+
+export async function handleLogin(req: Request, res: Response) {
+  try {
+    const { error } = loginS.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.details[0].message });
+      return;
+    }
+    const { email, password } = req.body;
+    const result = await loginUser(email, password);
+    res.cookie("token_user", result.token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ message: "berhasil login", ...result });
+  } catch (err: any) {
+    res
+      .status(401)
+      .json({ message: err?.message || "terjadi kesalahan pada saat login" });
+  }
+}
+
+export async function resetTokenRequest(req: Request, res: Response) {
+  const { email } = req.body;
+  const token = await resetToken(email);
+  res.json({ message: "token reset dikirim", token });
+  console.log(token);
+}
+export async function handleResetPassword(req: Request, res: Response) {
+  const { email, token, newPassword } = req.body;
+  await resetPassword(email, token, newPassword);
+  res.json({ message: "password berhasil di reset" });
+  console.log(resetPassword);
+}

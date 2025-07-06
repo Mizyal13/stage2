@@ -1,85 +1,93 @@
-// import bcrypt from "bcrypt";
-// import crypto from "crypto";
-// import { prisma } from "../connection/client";
-// import { signIn } from "../utils/jwt";
-// import {} from "../utils/multer";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { prisma } from "../connection/client";
+import { signIn } from "../utils/jwt";
 
-// export async function register(
-//   email: string,
-//   password: string,
-//   role: string,
-//   profile: string
-// ) {
-//   if (!email.match(/@/) || password.length < 6)
-//     throw new Error("email atau password tidak valid");
+export async function registerUser(
+  name: string,
+  email: string,
+  password: string,
+  role: string,
+  profile: string
+) {
+  if (!email.match(/@/) || password.length < 6)
+    throw new Error("email atau password tidak valid");
 
-//   // if (!req.file.)
-//   //   throw new Error("gambar tidak ada");
+  const hashed = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: { name, email, password: hashed, role, profile },
+  });
+  return {
+    name: user.name,
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    profile: user.profile,
+  };
+}
 
-//   const hashed = await bcrypt.hash(password, 10);
+export async function loginUser(email: string, password: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error("user tidak ditemukan");
 
-//   const user = await prisma.user.create({
-//     data: { email, password: hashed, role, profile },
-//   });
-//   return {
-//     id: user.id,
-//     email: user.email,
-//     role: user.role,
-//     profile: user.profile,
-//   };
-// }
-// export async function loginUser(email: string, password: string) {
-//   const user = await prisma.user.findUnique({ where: { email } });
-//   if (!user) throw new Error("user tidak ada");
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) throw new Error("password salah");
 
-//   const isMatch = await bcrypt.compare(password, user.password);
-//   if (!isMatch) throw new Error("password salah");
+  const token = signIn({ id: user.id, role: user.role });
+  return {
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      profile: user.profile,
+    },
+  };
+}
 
-//   const token = signIn({ id: user.id, role: user.role });
-//   return { token };
-// }
+export async function resetToken(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error("User tidak ditemukan");
 
-// export async function resetToken(email: string) {
-//   const user = await prisma.user.findUnique({ where: { email } });
-//   if (!user) throw new Error("user tidak ditemukan");
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  const hashed = crypto.createHash("sha256").update(rawToken).digest("hex");
+  const expires = new Date(Date.now() + 15 * 60 * 1000);
 
-//   const rawToken = crypto.randomBytes(32).toString("hex");
-//   const hashed = crypto.createHash("sha256").update(rawToken).digest("hex");
-//   const expires = new Date(Date.now() + 15 * 60 * 1000);
-//   await prisma.user.update({
-//     where: { email },
-//     data: {
-//       resetToken: hashed,
-//       resetTokenExpires: expires,
-//     },
-//   });
-//   return rawToken;
-// }
-// export async function resetPassword(
-//   email: string,
-//   token: string,
-//   newPassword: string
-// ) {
-//   const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-//   const user = await prisma.user.findFirst({
-//     where: {
-//       email,
-//       resetToken: hashedToken,
-//       resetTokenExpires: {
-//         gt: new Date(),
-//       },
-//     },
-//   });
+  await prisma.user.update({
+    where: { email },
+    data: {
+      resetToken: hashed,
+      resetTokenExpires: expires,
+    },
+  });
+  return rawToken;
+}
 
-//   if (!user) throw new Error("token tidak valid atau kadaluarsa");
-//   const hashedPassword = await bcrypt.hash(newPassword, 10);
+export async function resetPassword(
+  email: string,
+  token: string,
+  newPassword: string
+) {
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+  const user = await prisma.user.findFirst({
+    where: {
+      email,
+      resetToken: hashedToken,
+      resetTokenExpires: {
+        gt: new Date(),
+      },
+    },
+  });
 
-//   await prisma.user.update({
-//     where: { id: user.id },
-//     data: {
-//       password: hashedPassword,
-//       resetToken: null,
-//       resetTokenExpires: null,
-//     },
-//   });
-// }
+  if (!user) throw new Error("token tidak valid atau kadaluarsa");
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      password: hashedPassword,
+      resetToken: null,
+      resetTokenExpires: null,
+    },
+  });
+}
